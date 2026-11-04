@@ -1,23 +1,22 @@
 import requests
 from player import Player
 
+
+def print_players_by_nationality(players, nationality):
+    print(f"Players from {nationality}:\n")
+    for player in players:
+        if player.nationality == nationality:
+            print(player)
+
+
 def main():
     url = "https://studies.cs.helsinki.fi/nhlstats/2024-25/players"
     response = requests.get(url).json()
 
-    print("JSON-muotoinen vastaus:")
-    print(response)
+    players = [Player(player_data) for player_data in response]
 
-    players = []
+    print_players_by_nationality(players, "FIN")
 
-    for player_dict in response:
-        player = Player(player_dict)
-        players.append(player)
-
-    print("Oliot:")
-
-    for player in players:
-        print(player)
 
 if __name__ == "__main__":
     main()
