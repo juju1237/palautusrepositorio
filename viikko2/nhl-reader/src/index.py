@@ -3,10 +3,14 @@ from player import Player
 
 
 def print_players_by_nationality(players, nationality):
-    print(f"Players from {nationality}:\n")
-    for player in players:
-        if player.nationality == nationality:
-            print(player)
+    print(f"Players from {nationality}\n")
+    nationality_players = [
+        player for player in players if player.nationality == nationality
+    ]
+    for player in sorted(
+        nationality_players, key=lambda player: player.points, reverse=True
+    ):
+        print(player)
 
 
 def main():
