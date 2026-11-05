@@ -6,15 +6,7 @@ from player_reader import PlayerReader
 from player_stats import PlayerStats
 
 
-def main():
-    nationality = Prompt.ask("Nationality (e.g. FIN)").strip().upper()
-    season = Prompt.ask("Season (e.g. 2024-25)").strip()
-    url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
-
-    reader = PlayerReader(url)
-    stats = PlayerStats(reader)
-    players = stats.top_scorers_by_nationality(nationality)
-
+def create_table(players, nationality, season):
     table = Table(title=f"Players from {nationality} ({season})")
     table.add_column("Player", style="cyan", no_wrap=True)
     table.add_column("Team", style="purple")
@@ -31,6 +23,17 @@ def main():
             str(player.points),
         )
 
+    return table
+
+
+def main():
+    nationality = Prompt.ask("Nationality (e.g. FIN)").strip().upper()
+    season = Prompt.ask("Season (e.g. 2024-25)").strip()
+    url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
+    reader = PlayerReader(url)
+    stats = PlayerStats(reader)
+    players = stats.top_scorers_by_nationality(nationality)
+    table = create_table(players, nationality, season)
     Console().print(table)
 
 
