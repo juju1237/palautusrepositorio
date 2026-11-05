@@ -6,8 +6,8 @@ from player_reader import PlayerReader
 from player_stats import PlayerStats
 
 
-def create_table(players, nationality, season):
-    table = Table(title=f"Players from {nationality} ({season})")
+def create_table(players, group, season):
+    table = Table(title=f"Players: {group} ({season})")
     table.add_column("Player", style="cyan", no_wrap=True)
     table.add_column("Team", style="purple")
     table.add_column("Goals", justify="right", style="green")
@@ -26,14 +26,28 @@ def create_table(players, nationality, season):
     return table
 
 
+def find_players(stats):
+    """Kysyy hakuperusteen ja palauttaa sitä vastaavat pelaajat."""
+    search_by = Prompt.ask(
+        "Search by nationality or team",
+        choices=["nationality", "team"],
+        default="nationality",
+    )
+    group = Prompt.ask(
+        "Nationality (e.g. FIN)" if search_by == "nationality" else "Team"
+    ).strip().upper()
+    if search_by == "nationality":
+        return stats.top_scorers_by_nationality(group), group
+    return stats.top_scorers_by_team(group), group
+
+
 def main():
-    nationality = Prompt.ask("Nationality (e.g. FIN)").strip().upper()
     season = Prompt.ask("Season (e.g. 2024-25)").strip()
     url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
     reader = PlayerReader(url)
     stats = PlayerStats(reader)
-    players = stats.top_scorers_by_nationality(nationality)
-    table = create_table(players, nationality, season)
+    players, group = find_players(stats)
+    table = create_table(players, group, season)
     Console().print(table)
 
 
