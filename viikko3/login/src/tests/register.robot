@@ -5,6 +5,14 @@ Suite Teardown  Close Browser
 Test Setup      Reset Application Create User And Go To Register Page
 
 *** Test Cases ***
+Register With Matching Password And Confirmation
+    Register User  matti  salasana1  salasana1
+    Register Should Succeed
+
+Register With Different Password And Confirmation
+    Register User  matti  salasana1  salasana2
+    Register Should Fail With Error
+
 Register With Valid Username And Password
     Register User  matti  salasana1
     Register Should Succeed
@@ -39,10 +47,10 @@ Register With Password Containing Only Uppercase And Lowercase Letters
 
 *** Keywords ***
 Register User
-    [Arguments]  ${username}  ${password}
+    [Arguments]  ${username}  ${password}  ${password_confirmation}=${password}
     Fill Text  id=username  ${username}
     Fill Secret  id=password  $password
-    Fill Secret  id=password_confirmation  $password
+    Fill Secret  id=password_confirmation  $password_confirmation
     Click  button >> text=Register
 
 Register Should Succeed
