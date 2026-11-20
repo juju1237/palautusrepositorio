@@ -59,14 +59,12 @@ class TestOstoskori(unittest.TestCase):
 
     def test_kahden_saman_tuotteen_jalkeen_korissa_kaksi_tavaraa(self):
         porkkana = Tuote("Porkkana", 67)
-        porkkana = Tuote("Porkkana", 67)
         self.kori.lisaa_tuote(porkkana)
         self.kori.lisaa_tuote(porkkana)
 
         self.assertEqual(self.kori.tavaroita_korissa(), 2)
 
     def test_kahden_saman_tuotteen_jalkeen_korin_hinta_2_kertaa_tuotteen_hinta(self):
-        porkkana = Tuote("Porkkana", 67)
         porkkana = Tuote("Porkkana", 67)
         self.kori.lisaa_tuote(porkkana)
         self.kori.lisaa_tuote(porkkana)
@@ -79,3 +77,12 @@ class TestOstoskori(unittest.TestCase):
         self.kori.lisaa_tuote(porkkana)
 
         self.assertEqual(len(self.kori.ostokset()), 1)
+
+    def test_kahden_saman_tuotteen_jalkeen_ostos_nimi_ja_lukumaara(self):
+        porkkana = Tuote("Porkkana", 67)
+        self.kori.lisaa_tuote(porkkana)
+        self.kori.lisaa_tuote(porkkana)
+
+        ostos = self.kori.ostokset()[0]
+        self.assertEqual(ostos.tuotteen_nimi(), porkkana.nimi())
+        self.assertEqual(ostos.lukumaara(), 2)
